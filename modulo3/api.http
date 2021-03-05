@@ -1,0 +1,23 @@
+POST http://localhost:3000
+Content-Type: application/json
+
+{
+  "name": "Alexandre Evangelista"
+}
+
+###
+GET http://localhost:3000
+Accept: application/json
+
+###
+
+PUT http://localhost:3000/604102088284e00a76086f53
+Content-Type: application/json
+
+{
+  "name": "Alexandre E Souza"
+}
+###
+
+DELETE http://localhost:3000/604102088284e00a76086f53
+Content-Type: application/json
