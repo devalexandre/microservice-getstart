@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 class Connection{
     constructor(){
-        this.url ='mongodb://192.168.1.8:27017/curso';
+        this.url ='mongodb://192.168.1.3:27017/curso';
 
     }
    connect(){
