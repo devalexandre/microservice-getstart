@@ -1,0 +1,62 @@
+version: '3.5'
+
+networks:
+  curso_microservices:
+    name: "curso_microservices"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server
+    networks:
+      - curso_microservices
+    environment:
+      - "SERVICE=server"
+      - "KAFKA_HOST=kafka"
+      - "KAFKA_PORT=9092"
+      - "NODE_ENV=develop"
+
+    depends_on:
+      - kafka
+
+  kafka:
+    image: alephp/kafka
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    hostname: kafka
+    container_name: kafka
+    networks:
+      - curso_microservices
+    environment:
+      - "ADVERTISED_HOST=kafka"
+      - "ADVERTISED_PORT=9092"
+      - "AUTO_CREATE_TOPICS=true"
+    command: >
+      bash -c
+      "(sleep 15s &&
+      /opt/kafka_2.13-2.7.0/bin/kafka-topics.sh
+      --create
+      --zookeeper
+      localhost:2181 --replication-factor 1 --partitions 3
+      --topic microservice-curso &) && (supervisord -n) && (
+      /opt/kafka_2.13-2.7.0/bin/kafka-leader-election.sh
+      --bootstrap-server :9092
+      --topic microservice-curso
+      --partition 0
+      --election-type preferred)"
+
+#  kafka-ui:
+#    image: provectuslabs/kafka-ui
+#    container_name: kafka-ui
+#    ports:
+#      - "9000:8080"
+#    environment:
+#      - "KAFKA_CLUSTERS_0_NAME=local"
+#      - "KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=192.168.1.181:9092"
+#      - "KAFKA_CLUSTERS_0_ZOOKEEPER=192.168.1.181:2181"
+#    depends_on:
+#      - kafka
+
