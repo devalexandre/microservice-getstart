@@ -1,15 +1,13 @@
 version: '3.5'
 
-networks:
-  curso_microservices:
-    name: "curso_microservices"
-
 services:
   server:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: server
+    volumes:
+    - .:/app
     networks:
       - curso_microservices
     environment:
@@ -17,7 +15,23 @@ services:
       - "KAFKA_HOST=kafka"
       - "KAFKA_PORT=9092"
       - "NODE_ENV=develop"
+    depends_on:
+      - kafka
 
+  notify:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: notify
+    volumes:
+      - .:/app
+    networks:
+      - curso_microservices
+    environment:
+      - "SERVICE=notify"
+      - "KAFKA_HOST=kafka"
+      - "KAFKA_PORT=9092"
+      - "NODE_ENV=develop"
     depends_on:
       - kafka
 
@@ -31,7 +45,7 @@ services:
     networks:
       - curso_microservices
     environment:
-      - "ADVERTISED_HOST=kafka"
+      - "ADVERTISED_HOST=192.168.0.4"
       - "ADVERTISED_PORT=9092"
       - "AUTO_CREATE_TOPICS=true"
     command: >
@@ -48,15 +62,6 @@ services:
       --partition 0
       --election-type preferred)"
 
-#  kafka-ui:
-#    image: provectuslabs/kafka-ui
-#    container_name: kafka-ui
-#    ports:
-#      - "9000:8080"
-#    environment:
-#      - "KAFKA_CLUSTERS_0_NAME=local"
-#      - "KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=192.168.1.181:9092"
-#      - "KAFKA_CLUSTERS_0_ZOOKEEPER=192.168.1.181:2181"
-#    depends_on:
-#      - kafka
-
+networks:
+  curso_microservices:
+    name: "curso_microservices"
