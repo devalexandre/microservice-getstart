@@ -1,0 +1,33 @@
+{
+  "name": "microservice-getstart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devalexandre/microservice-getstart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devalexandre/microservice-getstart/issues"
+  },
+  "homepage": "https://github.com/devalexandre/microservice-getstart#readme",
+  "dependencies": {
+    "@polka/parse": "^1.0.0-next.0",
+    "kafkajs": "^1.15.0",
+    "pino": "^6.13.0",
+    "pino-pretty": "^5.1.2",
+    "polka": "^0.5.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "nodemon": "^2.0.12"
+  }
+}
