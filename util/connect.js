@@ -1,27 +1,24 @@
-const Kkc = Symbol('kafka-connect');
-const Kbk = Symbol('kafka-broker');
-const Kck = Symbol('kafka-clientId');
 const { Kafka, logLevel } = require('kafkajs');
 const logger  = require('./logger');
 
 class KafkaConnect {
     constructor(brokers, clientId) {
-        this[Kbk] = brokers;
-        this[Kck] = clientId;
+        this.brokers = brokers;
+        this.clientId = clientId;
     }
 
     connect() {
         try {
-            this[Kkc] = new Kafka({
-                clientId: this[Kck],
-                brokers: this[Kbk],
+            const kafka  = new Kafka({
+                clientId: this.clientId,
+                brokers: this.brokers,
             });
 
-            this[Kkc].logger().setLogLevel(logLevel.NOTHING);
+            kafka.logger().setLogLevel(logLevel.NOTHING);
             logger.info('Connected in kafka');
-            return this[Kkc];
+            return kafka;
         } catch (e) {
-            logger.error('Error %s', e);
+            logger.error('Connect Error %s', JSON.stringify(e));
         }
     }
 }
